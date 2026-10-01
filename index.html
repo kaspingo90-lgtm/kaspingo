@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kaspin Go — Pinjaman Online Cepat & Terpercaya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1EA84A; --navy-2:#157A36;
+    --bg:#F4F6F5; --surface:#FFFFFF;
+    --amber:#FF7A45; --amber-dark:#E85F2E;
+    --ink:#1C2530; --muted:#5B6672;
+    --green:#1FBFAE; --line:#DDE2E0;
+    --radius:4px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F1720; --surface:#17212C; --ink:#EAEDEF; --muted:#9AA6AE; --line:#2A343E;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F1720; --surface:#17212C; --ink:#EAEDEF; --muted:#9AA6AE; --line:#2A343E;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Inter", ui-sans-serif, system-ui, sans-serif;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Fraunces", Georgia, serif; margin:0; color:var(--ink); font-weight:600;}
+  p{color:var(--muted); line-height:1.6; margin:0;}
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+  :focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+
+  header.nav{position:sticky; top:env(safe-area-inset-top,0px); z-index:50; background:var(--navy); color:#fff;}
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:1080px; margin:0 auto;}
+  .logo{display:flex; align-items:center; gap:9px; font-family:"Fraunces",serif; font-size:1.3rem; font-weight:700; color:#fff; letter-spacing:.2px;}
+  nav.links{display:flex; gap:28px; font-size:.92rem;}
+  nav.links a{color:#DDF3E4; text-decoration:none;}
+  nav.links a:hover{color:#fff;}
+  .btn{display:inline-block; padding:11px 22px; border-radius:var(--radius); font-weight:600; font-size:.92rem; text-decoration:none; cursor:pointer; border:none;}
+  .btn-amber{background:var(--amber); color:#fff;}
+  .btn-amber:hover{background:var(--amber-dark);}
+  .btn-outline{background:transparent; border:1px solid rgba(255,255,255,.4); color:#fff;}
+  .btn-outline:hover{border-color:#fff;}
+  .navcta{display:none;}
+  @media(min-width:720px){.navcta{display:inline-block;}}
+
+  .hero{background:var(--navy); color:#fff; padding:56px 0 72px;}
+  .hero-grid{display:grid; grid-template-columns:1fr; gap:40px;}
+  @media(min-width:860px){.hero-grid{grid-template-columns:1.1fr .9fr; align-items:center;}}
+  .eyebrow-badges{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;}
+  .badge{font-size:.78rem; color:#E7FBEF; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3); padding:5px 12px; border-radius:100px;}
+  .hero h1{font-size:clamp(2rem,4.4vw,2.85rem); line-height:1.12; max-width:16ch;}
+  .hero p.lead{color:#E1F3E7; font-size:1.05rem; max-width:46ch; margin-top:16px;}
+  .hero-ctas{display:flex; gap:14px; margin-top:28px; flex-wrap:wrap;}
+
+  .calc-card{background:var(--surface); color:var(--ink); border-radius:var(--radius); padding:28px; box-shadow:0 20px 50px rgba(0,0,0,.25);}
+  .calc-card h3{font-size:1.05rem; margin-bottom:4px;}
+  .calc-card .sub{font-size:.85rem; margin-bottom:22px;}
+  .field{margin-bottom:20px;}
+  .field label{display:flex; justify-content:space-between; font-size:.85rem; font-weight:600; margin-bottom:8px;}
+  .field label .val{color:var(--amber-dark); font-family:"Fraunces",serif; font-weight:600;}
+  input[type=range]{width:100%; accent-color:var(--amber);}
+  .result{border-top:1px solid var(--line); margin-top:22px; padding-top:18px; display:flex; justify-content:space-between; align-items:baseline;}
+  .result .label{font-size:.82rem; color:var(--muted);}
+  .result .amount{font-family:"Fraunces",serif; font-size:1.6rem; font-weight:600; color:var(--navy);}
+  @media (prefers-color-scheme:dark){.result .amount{color:var(--amber);}}
+  :root[data-theme="dark"] .result .amount{color:var(--amber);}
+  .calc-note{font-size:.72rem; color:var(--muted); margin-top:10px;}
+
+  section{padding:64px 0;}
+  .section-head{max-width:56ch; margin-bottom:40px;}
+  .section-head h2{font-size:clamp(1.5rem,3vw,2rem);}
+  .section-head p{margin-top:12px;}
+
+  .features{display:grid; grid-template-columns:1fr; border-top:1px solid var(--line);}
+  @media(min-width:760px){.features{grid-template-columns:repeat(3,1fr);}}
+  .feature{padding:28px 0; border-bottom:1px solid var(--line);}
+  @media(min-width:760px){.feature{padding:28px 32px 28px 0; border-bottom:none;}
+    .feature+.feature{border-left:1px solid var(--line); padding-left:32px;}}
+  .feature .icon{width:34px; height:34px; margin-bottom:16px; color:var(--green);}
+  .feature h3{font-size:1.05rem; margin-bottom:8px;}
+  .feature p{font-size:.92rem;}
+
+  .steps{display:grid; grid-template-columns:1fr; gap:0;}
+  @media(min-width:760px){.steps{grid-template-columns:repeat(4,1fr); gap:24px;}}
+  .step{padding:20px 0; border-top:2px solid var(--line);}
+  .step .num{font-family:"Fraunces",serif; font-size:1.6rem; color:var(--amber-dark); display:block; margin-bottom:10px;}
+  .step h3{font-size:.98rem; margin-bottom:6px;}
+  .step p{font-size:.88rem;}
+
+  .form-section{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  form.apply{display:grid; grid-template-columns:1fr; gap:18px; max-width:640px;}
+  @media(min-width:640px){form.apply{grid-template-columns:1fr 1fr;}}
+  .full{grid-column:1/-1;}
+  .apply label{display:block; font-size:.85rem; font-weight:600; margin-bottom:6px;}
+  .apply input, .apply textarea{width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:var(--radius); background:var(--bg); color:var(--ink); font-family:inherit; font-size:.92rem;}
+  .apply textarea{resize:vertical; min-height:80px;}
+  .submit-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:6px;}
+  .form-note{font-size:.78rem; color:var(--muted); margin-top:14px;}
+
+  .contact-grid{display:grid; grid-template-columns:1fr; gap:16px; max-width:640px;}
+  @media(min-width:600px){.contact-grid{grid-template-columns:repeat(2,1fr);}}
+  .contact-card{border:1px solid var(--line); border-radius:var(--radius); padding:22px; background:var(--surface); display:flex; flex-direction:column; gap:10px; text-decoration:none;}
+  .contact-card .icon{width:26px; height:26px; color:var(--navy);}
+  @media (prefers-color-scheme:dark){.contact-card .icon{color:var(--amber);}}
+  .contact-card h3{font-size:1rem;}
+  .contact-card p{font-size:.88rem;}
+  .contact-card:hover{border-color:var(--amber);}
+
+  footer{background:var(--navy-2); color:#B9E9C7; padding:40px 0 calc(28px + env(safe-area-inset-bottom,0px));}
+  .footer-grid{display:flex; flex-direction:column; gap:18px;}
+  @media(min-width:760px){.footer-grid{flex-direction:row; justify-content:space-between; align-items:flex-start;}}
+  footer .logo{margin-bottom:8px;}
+  .legal{font-size:.76rem; color:#8FBF9E; max-width:70ch; margin-top:18px; line-height:1.6;}
+
+  .fab{position:fixed; right:20px; bottom:calc(20px + env(safe-area-inset-bottom,0px)); z-index:60; background:var(--green); color:#fff; border-radius:100px; padding:13px 20px; display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:600; font-size:.88rem; box-shadow:0 10px 24px rgba(0,0,0,.25);}
+  .fab svg{width:20px; height:20px;}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="logo">
+      <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+        <rect width="30" height="30" rx="8" fill="#fff"/>
+        <rect x="7" y="7" width="4" height="16" rx="2" fill="var(--navy)"/>
+        <path d="M14 15 L22 8 L22 22 Z" fill="var(--navy)"/>
+        <circle cx="24" cy="9" r="2" fill="var(--amber)"/>
+        <circle cx="24" cy="21" r="2" fill="var(--green)"/>
+      </svg>
+      Kaspin Go
+    </div>
+    <nav class="links">
+      <a href="#simulasi">Simulasi</a>
+      <a href="#cara-kerja">Cara Kerja</a>
+      <a href="#formulir">Pengajuan</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+    <a class="btn btn-amber navcta" href="#formulir">Ajukan Sekarang</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow-badges">
+        <span class="badge">Terdaftar & diawasi OJK · [No. Izin]</span>
+        <span class="badge">Data terenkripsi</span>
+      </div>
+      <h1>Pinjaman cair cepat, tanpa ribet, tanpa jebakan.</h1>
+      <p class="lead">Ajukan pinjaman online mulai dari Rp1 juta, cicilan transparan sejak awal, dan tim kami merespons langsung lewat WhatsApp atau email — bukan robot.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-amber" href="#formulir">Ajukan Sekarang</a>
+        <a class="btn btn-outline" href="#simulasi">Hitung Simulasi</a>
+      </div>
+    </div>
+
+    <div class="calc-card" id="simulasi">
+      <h3>Simulasi Cicilan</h3>
+      <p class="sub">Geser untuk melihat estimasi cicilan bulanan Anda.</p>
+      <div class="field">
+        <label>Jumlah Pinjaman <span class="val" id="amtLabel">Rp5.000.000</span></label>
+        <input type="range" id="amt" min="1000000" max="50000000" step="500000" value="5000000">
+      </div>
+      <div class="field">
+        <label>Tenor <span class="val" id="tenLabel">6 bulan</span></label>
+        <input type="range" id="ten" min="1" max="24" step="1" value="6">
+      </div>
+      <div class="result">
+        <span class="label">Estimasi cicilan / bulan</span>
+        <span class="amount" id="monthly">Rp881.000</span>
+      </div>
+      <p class="calc-note">Estimasi bunga flat 2%/bulan, bukan penawaran final. Angka pasti diberikan setelah verifikasi.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Kenapa memilih Kaspin Go</h2>
+      <p>Kami membangun proses pinjaman yang jelas dari awal — tanpa biaya tersembunyi dan tanpa tekanan.</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
+        <h3>Cair dalam 1x24 jam</h3>
+        <p>Setelah dokumen lengkap dan disetujui, dana langsung ditransfer ke rekening Anda.</p>
+      </div>
+      <div class="feature">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>
+        <h3>Aman & legal</h3>
+        <p>Terdaftar di OJK dengan sistem enkripsi data, sesuai standar keamanan finansial.</p>
+      </div>
+      <div class="feature">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
+        <h3>Bunga & biaya transparan</h3>
+        <p>Semua simulasi cicilan ditampilkan di muka, tanpa biaya tersembunyi di belakang.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cara-kerja">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Cara kerja pengajuan</h2>
+      <p>Empat langkah sederhana dari pengajuan sampai dana cair.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="num">01</span><h3>Isi formulir</h3><p>Lengkapi data diri dan jumlah pinjaman yang Anda butuhkan.</p></div>
+      <div class="step"><span class="num">02</span><h3>Verifikasi</h3><p>Tim kami menghubungi Anda via WhatsApp untuk verifikasi data.</p></div>
+      <div class="step"><span class="num">03</span><h3>Persetujuan</h3><p>Anda menerima rincian cicilan final dan menyetujui perjanjian.</p></div>
+      <div class="step"><span class="num">04</span><h3>Dana cair</h3><p>Dana ditransfer langsung ke rekening bank Anda.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="form-section" id="formulir">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Pengajuan</h2>
+      <p>Isi data di bawah, lalu kirim langsung ke tim kami melalui WhatsApp atau email.</p>
+    </div>
+    <form class="apply" onsubmit="return false;">
+      <div>
+        <label for="nama">Nama lengkap</label>
+        <input id="nama" type="text" placeholder="Nama sesuai KTP" required>
+      </div>
+      <div>
+        <label for="hp">Nomor HP / WhatsApp</label>
+        <input id="hp" type="tel" placeholder="08xxxxxxxxxx" required>
+      </div>
+      <div>
+        <label for="jumlah">Jumlah pinjaman (Rp)</label>
+        <input id="jumlah" type="number" placeholder="5000000" required>
+      </div>
+      <div>
+        <label for="tenor">Tenor (bulan)</label>
+        <input id="tenor" type="number" placeholder="6" required>
+      </div>
+      <div class="full">
+        <label for="tujuan">Tujuan pinjaman</label>
+        <textarea id="tujuan" placeholder="Contoh: modal usaha, kebutuhan mendesak, dll."></textarea>
+      </div>
+      <div class="full submit-row">
+        <button class="btn btn-amber" onclick="kirimWA()">Kirim via WhatsApp</button>
+        <button class="btn btn-outline" style="color:var(--navy); border-color:var(--line);" onclick="kirimEmail()">Kirim via Email</button>
+      </div>
+      <p class="full form-note">Dengan mengirim formulir ini Anda menyetujui data digunakan untuk proses verifikasi pinjaman. Tidak ada biaya di muka yang diminta sebelum pencairan.</p>
+    </form>
+  </div>
+</section>
+
+<section id="kontak">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Hubungi kami</h2>
+      <p>Ada pertanyaan sebelum mengajukan? Tim kami siap membantu lewat kanal berikut.</p>
+    </div>
+    <div class="contact-grid">
+      <a class="contact-card" href="https://wa.me/6282382723259" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L4 20l1-4.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+        <h3>WhatsApp</h3>
+        <p>+62 823-8272-3259 — respons rata-rata di bawah 10 menit.</p>
+      </a>
+      <a class="contact-card" href="mailto:[email protected]">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18v12H3zM3 6l9 7 9-7"/></svg>
+        <h3>Email</h3>
+        <p>[email protected] — untuk pertanyaan detail & dokumen.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="logo">
+        <svg width="26" height="26" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+          <rect width="30" height="30" rx="8" fill="#fff"/>
+          <rect x="7" y="7" width="4" height="16" rx="2" fill="var(--navy)"/>
+          <path d="M14 15 L22 8 L22 22 Z" fill="var(--navy)"/>
+          <circle cx="24" cy="9" r="2" fill="var(--amber)"/>
+          <circle cx="24" cy="21" r="2" fill="var(--green)"/>
+        </svg>
+        Kaspin Go
+      </div>
+      <p style="color:#B9E9C7; font-size:.85rem; max-width:34ch;">Layanan pinjaman online untuk kebutuhan mendesak Anda, diproses cepat dan transparan.</p>
+    </div>
+    <div style="font-size:.85rem;">
+      <p style="color:#B9E9C7;">© 2026 Kaspin Go. Seluruh hak cipta dilindungi.</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="legal">PT Kaspin Go Finansial Indonesia terdaftar dan diawasi oleh Otoritas Jasa Keuangan (OJK) dengan nomor izin [isi nomor izin OJK di sini]. Pastikan Anda hanya menghubungi kanal resmi di atas. Kami tidak pernah meminta biaya administrasi di muka sebelum pencairan dana.</p>
+  </div>
+</footer>
+
+<a class="fab" href="https://wa.me/6282382723259" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L4 20l1-4.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+  Chat WhatsApp
+</a>
+
+<script>
+  const amt = document.getElementById('amt');
+  const ten = document.getElementById('ten');
+  const amtLabel = document.getElementById('amtLabel');
+  const tenLabel = document.getElementById('tenLabel');
+  const monthly = document.getElementById('monthly');
+
+  function fmt(n){ return 'Rp' + Math.round(n).toLocaleString('id-ID'); }
+
+  function calc(){
+    const principal = parseInt(amt.value, 10);
+    const months = parseInt(ten.value, 10);
+    const rate = 0.02;
+    const total = principal * (1 + rate * months);
+    const perMonth = total / months;
+    amtLabel.textContent = fmt(principal);
+    tenLabel.textContent = months + ' bulan';
+    monthly.textContent = fmt(perMonth) + '/bln';
+  }
+  amt.addEventListener('input', calc);
+  ten.addEventListener('input', calc);
+  calc();
+
+  function formData(){
+    const nama = document.getElementById('nama').value || '-';
+    const hp = document.getElementById('hp').value || '-';
+    const jumlah = document.getElementById('jumlah').value || '-';
+    const tenor = document.getElementById('tenor').value || '-';
+    const tujuan = document.getElementById('tujuan').value || '-';
+    return { nama, hp, jumlah, tenor, tujuan };
+  }
+
+  function kirimWA(){
+    const d = formData();
+    const msg = `Halo Kaspin Go, saya ingin mengajukan pinjaman.%0A%0ANama: ${encodeURIComponent(d.nama)}%0ANo HP: ${encodeURIComponent(d.hp)}%0AJumlah pinjaman: Rp${encodeURIComponent(d.jumlah)}%0ATenor: ${encodeURIComponent(d.tenor)} bulan%0ATujuan: ${encodeURIComponent(d.tujuan)}`;
+    window.open(`https://wa.me/6282382723259?text=${msg}`, '_blank');
+  }
+
+  function kirimEmail(){
+    const d = formData();
+    const subject = encodeURIComponent('Pengajuan Pinjaman - ' + d.nama);
+    const body = encodeURIComponent(
+      `Nama: ${d.nama}\nNo HP: ${d.hp}\nJumlah pinjaman: Rp${d.jumlah}\nTenor: ${d.tenor} bulan\nTujuan: ${d.tujuan}`
+    );
+    window.location.href = `mailto:[email protected]?subject=${subject}&body=${body}`;
+  }
+</script>
+
+</body>
+</html>
